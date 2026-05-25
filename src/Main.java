@@ -163,8 +163,9 @@ public class Main {
             System.out.print("Unit price ($): ");
             try {
                 double p = Double.parseDouble(scanner.nextLine().trim());
-                if (p > 0) return p;
-                System.out.println("Price must be greater than $0.00.");
+                if (p < 1.00)         { System.out.println("Price must be at least $1.00.");          continue; }
+                if (p > 99_999.99)    { System.out.println("Price cannot exceed $99,999.99.");        continue; }
+                return p;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid price.");
             }
