@@ -1,0 +1,156 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Customer</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: Customer (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Customer</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (4/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    52.9%
+  </span>
+  <span class="absValue">
+    (9/17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;public class Customer {
+&nbsp;    private int Id;
+&nbsp;    private String name;
+&nbsp;    private String stateOfResidence;
+&nbsp;    private Cart cart;
+&nbsp;    private ShippingOption shippingOption;
+&nbsp;
+<b class="fc">&nbsp;    public Customer(int Id, String name, String stateOfResidence, ShippingOption shippingOption, Cart cart){</b>
+<b class="fc">&nbsp;        this.Id = Id;</b>
+<b class="fc">&nbsp;        this.name = name;</b>
+<b class="fc">&nbsp;        this.stateOfResidence = stateOfResidence;</b>
+<b class="fc">&nbsp;        this.shippingOption = shippingOption;</b>
+<b class="fc">&nbsp;        this.cart = cart;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public double getCartTotal(){
+<b class="nc">&nbsp;        return cart.getTotal(stateOfResidence, shippingOption);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getId() {
+<b class="nc">&nbsp;        return Id;</b>
+&nbsp;    }
+&nbsp;    public void setId(int id) {
+<b class="nc">&nbsp;        Id = id;</b>
+&nbsp;    }
+&nbsp;    public String getName() {
+<b class="nc">&nbsp;        return name;</b>
+&nbsp;    }
+&nbsp;    public void setName(String name) {
+<b class="nc">&nbsp;        this.name = name;</b>
+&nbsp;    }
+&nbsp;    public String getStateOfResidence() {
+<b class="fc">&nbsp;        return stateOfResidence;</b>
+&nbsp;    }
+&nbsp;    public void setStateOfResidence(String stateOfResidence) {
+<b class="nc">&nbsp;        this.stateOfResidence = stateOfResidence;</b>
+&nbsp;    }
+&nbsp;    public Cart getCart() {
+<b class="fc">&nbsp;        return cart;</b>
+&nbsp;    }
+&nbsp;    public void setCart(Cart cart) {
+<b class="nc">&nbsp;        this.cart = cart;</b>
+&nbsp;    }
+&nbsp;    public ShippingOption getShippingOption() {
+<b class="fc">&nbsp;        return shippingOption;</b>
+&nbsp;    }
+&nbsp;    public void setShippingOption(ShippingOption shippingOption) {
+<b class="nc">&nbsp;        this.shippingOption = shippingOption;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-06-11 18:13</div>
+</div>
+</body>
+</html>

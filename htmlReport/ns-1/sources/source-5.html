@@ -1,0 +1,343 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Main</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: Main (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Main</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    89.5%
+  </span>
+  <span class="absValue">
+    (17/19)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (46/46)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    96.7%
+  </span>
+  <span class="absValue">
+    (118/122)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;import java.util.Map;
+&nbsp;import java.util.Scanner;
+&nbsp;
+<b class="nc">&nbsp;public class Main {</b>
+&nbsp;
+<b class="fc">&nbsp;    private static int nextItemId = 1;</b>
+&nbsp;
+&nbsp;    public static void main(String[] args) {
+<b class="nc">&nbsp;        Scanner scanner = new Scanner(System.in);</b>
+<b class="nc">&nbsp;        runApp(scanner);</b>
+&nbsp;        scanner.close();
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void runApp(Scanner scanner) {
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;========================================&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;         Welcome to the Shop            &quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;========================================&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.print(&quot;\nEnter your name: &quot;);</b>
+<b class="fc">&nbsp;        String name = scanner.nextLine().trim();</b>
+&nbsp;
+<b class="fc">&nbsp;        String state = promptState(scanner);</b>
+<b class="fc">&nbsp;        ShippingOption shipping = promptShippingOption(scanner);</b>
+&nbsp;
+<b class="fc">&nbsp;        Cart     cart     = new Cart(1, 1);</b>
+<b class="fc">&nbsp;        Customer customer = new Customer(1, name, state, shipping, cart);</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.printf(&quot;%nHello %s! Shipping: %s | State: %s%n&quot;, name, shipping, state);</b>
+&nbsp;
+<b class="fc">&nbsp;        boolean running = true;</b>
+<b class="fc">&nbsp;        while (running) {</b>
+<b class="fc">&nbsp;            printMenu();</b>
+<b class="fc">&nbsp;            String choice = scanner.nextLine().trim();</b>
+&nbsp;
+<b class="fc">&nbsp;            switch (choice) {</b>
+<b class="fc">&nbsp;                case &quot;1&quot;: handleAddItem(customer, scanner);             break;</b>
+<b class="fc">&nbsp;                case &quot;2&quot;: handleGetTotal(customer);                     break;</b>
+<b class="fc">&nbsp;                case &quot;3&quot;: handleViewCart(customer);                     break;</b>
+<b class="fc">&nbsp;                case &quot;4&quot;: handleEditQuantity(customer, scanner);        break;</b>
+<b class="fc">&nbsp;                case &quot;5&quot;: handleRemoveItem(customer, scanner);          break;</b>
+<b class="fc">&nbsp;                case &quot;6&quot;: running = !handleCheckout(customer);          break;</b>
+<b class="fc">&nbsp;                default:  System.out.println(&quot;Enter 1-6.&quot;);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // ── Action handlers ───────────────────────────────────────────────────────
+&nbsp;
+&nbsp;    static void handleAddItem(Customer customer, Scanner scanner) {
+<b class="fc">&nbsp;        System.out.print(&quot;\nItem name: &quot;);</b>
+<b class="fc">&nbsp;        String itemName = scanner.nextLine().trim();</b>
+<b class="fc">&nbsp;        if (itemName.isEmpty()) { System.out.println(&quot;Name cannot be blank.&quot;); return; }</b>
+&nbsp;
+<b class="fc">&nbsp;        double price = promptPrice(scanner);</b>
+<b class="fc">&nbsp;        int    qty   = promptQuantity(scanner);</b>
+&nbsp;
+&nbsp;        try {
+<b class="fc">&nbsp;            Item item = new Item(nextItemId++, itemName, price);</b>
+<b class="fc">&nbsp;            customer.getCart().addItemToCart(item, qty);</b>
+<b class="fc">&nbsp;            System.out.printf(&quot;\&quot;%s\&quot; added. Cart now has %d item(s).%n&quot;,</b>
+<b class="fc">&nbsp;                    itemName, customer.getCart().getTotalItemCount());</b>
+&nbsp;        } catch (IllegalArgumentException e) {
+<b class="nc">&nbsp;            System.out.println(&quot;Error: &quot; + e.getMessage());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    static void handleGetTotal(Customer customer) {
+<b class="fc">&nbsp;        Cart cart = customer.getCart();</b>
+<b class="fc">&nbsp;        if (cart.getCartItems().isEmpty()) { System.out.println(&quot;\nCart is empty.&quot;); return; }</b>
+&nbsp;
+<b class="fc">&nbsp;        double sub      = cart.getSubTotal();</b>
+<b class="fc">&nbsp;        double tax      = sub * getTaxRate(customer.getStateOfResidence());</b>
+<b class="fc">&nbsp;        double shipping = getShippingCost(sub, customer.getShippingOption());</b>
+<b class="fc">&nbsp;        double total    = sub + tax + shipping;</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;\n-------- Current Total --------&quot;);</b>
+<b class="fc">&nbsp;        System.out.printf(&quot;Subtotal : $%8.2f%n&quot;, sub);</b>
+<b class="fc">&nbsp;        System.out.printf(&quot;Tax      : $%8.2f%n&quot;, tax);</b>
+<b class="fc">&nbsp;        System.out.printf(&quot;Shipping : $%8.2f%n&quot;, shipping);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;------------------------------&quot;);</b>
+<b class="fc">&nbsp;        System.out.printf(&quot;Total    : $%8.2f%n&quot;, total);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    static void handleViewCart(Customer customer) {
+<b class="fc">&nbsp;        Map&lt;Item, Integer&gt; items = customer.getCart().getCartItems();</b>
+<b class="fc">&nbsp;        if (items.isEmpty()) { System.out.println(&quot;\nCart is empty.&quot;); return; }</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;\n-------- Cart Contents --------&quot;);</b>
+<b class="fc">&nbsp;        int i = 1;</b>
+<b class="fc">&nbsp;        for (Map.Entry&lt;Item, Integer&gt; entry : items.entrySet()) {</b>
+<b class="fc">&nbsp;            Item item = entry.getKey();</b>
+<b class="fc">&nbsp;            int  qty  = entry.getValue();</b>
+<b class="fc">&nbsp;            System.out.printf(&quot;%d. %-20s qty: %-4d line total: $%.2f%n&quot;,</b>
+<b class="fc">&nbsp;                    i++, item.getName(), qty, item.getPrice() * qty);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        System.out.printf(&quot;Subtotal: $%.2f%n&quot;, customer.getCart().getSubTotal());</b>
+<b class="fc">&nbsp;        System.out.println(&quot;------------------------------&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    static void handleEditQuantity(Customer customer, Scanner scanner) {
+<b class="fc">&nbsp;        if (customer.getCart().getCartItems().isEmpty()) {</b>
+<b class="fc">&nbsp;            System.out.println(&quot;\nCart is empty.&quot;); return;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        handleViewCart(customer);</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.print(&quot;Item name to edit: &quot;);</b>
+<b class="fc">&nbsp;        Item found = findItem(customer.getCart(), scanner.nextLine().trim());</b>
+<b class="fc">&nbsp;        if (found == null) { System.out.println(&quot;Item not found.&quot;); return; }</b>
+&nbsp;
+<b class="fc">&nbsp;        int newQty = promptQuantity(scanner);</b>
+<b class="fc">&nbsp;        customer.getCart().editQuantity(found, newQty);</b>
+<b class="fc">&nbsp;        System.out.printf(&quot;Quantity for \&quot;%s\&quot; updated to %d.%n&quot;, found.getName(), newQty);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    static void handleRemoveItem(Customer customer, Scanner scanner) {
+<b class="fc">&nbsp;        if (customer.getCart().getCartItems().isEmpty()) {</b>
+<b class="fc">&nbsp;            System.out.println(&quot;\nCart is empty.&quot;); return;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        handleViewCart(customer);</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.print(&quot;Item name to remove: &quot;);</b>
+<b class="fc">&nbsp;        Item found = findItem(customer.getCart(), scanner.nextLine().trim());</b>
+<b class="fc">&nbsp;        if (found == null) { System.out.println(&quot;Item not found.&quot;); return; }</b>
+&nbsp;
+<b class="fc">&nbsp;        customer.getCart().removeItem(found);</b>
+<b class="fc">&nbsp;        System.out.printf(&quot;\&quot;%s\&quot; removed. Cart now has %d item(s).%n&quot;,</b>
+<b class="fc">&nbsp;                found.getName(), customer.getCart().getTotalItemCount());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    static boolean handleCheckout(Customer customer) {
+<b class="fc">&nbsp;        if (customer.getCart().getCartItems().isEmpty()) {</b>
+<b class="fc">&nbsp;            System.out.println(&quot;\nCannot checkout — cart is empty.&quot;); return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        handleGetTotal(customer);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;\ntransaction completed&quot;);</b>
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // ── Input helpers ─────────────────────────────────────────────────────────
+&nbsp;
+&nbsp;    static String promptState(Scanner scanner) {
+&nbsp;        while (true) {
+<b class="fc">&nbsp;            System.out.print(&quot;State abbreviation (e.g. IL, TX): &quot;);</b>
+<b class="fc">&nbsp;            String s = scanner.nextLine().trim().toUpperCase();</b>
+<b class="fc">&nbsp;            if (s.matches(&quot;[A-Z]{2}&quot;)) return s;</b>
+<b class="fc">&nbsp;            System.out.println(&quot;Enter a valid 2-letter state.&quot;);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    static ShippingOption promptShippingOption(Scanner scanner) {
+<b class="fc">&nbsp;        System.out.println(&quot;Shipping: 1. Standard ($10, free over $50)  2. Next Day ($25)&quot;);</b>
+&nbsp;        while (true) {
+<b class="fc">&nbsp;            System.out.print(&quot;Select (1 or 2): &quot;);</b>
+<b class="fc">&nbsp;            switch (scanner.nextLine().trim()) {</b>
+<b class="fc">&nbsp;                case &quot;1&quot;: return ShippingOption.STANDARD;</b>
+<b class="fc">&nbsp;                case &quot;2&quot;: return ShippingOption.NEXT_DAY;</b>
+<b class="fc">&nbsp;                default:  System.out.println(&quot;Enter 1 or 2.&quot;);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    static double promptPrice(Scanner scanner) {
+&nbsp;        while (true) {
+<b class="fc">&nbsp;            System.out.print(&quot;Unit price ($): &quot;);</b>
+&nbsp;            try {
+<b class="fc">&nbsp;                double p = Double.parseDouble(scanner.nextLine().trim());</b>
+<b class="fc">&nbsp;                if (p &lt; 1.00)      { System.out.println(&quot;Price must be at least $1.00.&quot;);   continue; }</b>
+<b class="fc">&nbsp;                if (p &gt; 99_999.99) { System.out.println(&quot;Price cannot exceed $99,999.99.&quot;); continue; }</b>
+<b class="fc">&nbsp;                return p;</b>
+&nbsp;            } catch (NumberFormatException e) {
+<b class="fc">&nbsp;                System.out.println(&quot;Invalid price.&quot;);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    static int promptQuantity(Scanner scanner) {
+&nbsp;        while (true) {
+<b class="fc">&nbsp;            System.out.print(&quot;Quantity: &quot;);</b>
+<b class="fc">&nbsp;            String input = scanner.nextLine().trim();</b>
+<b class="fc">&nbsp;            if (input.contains(&quot;.&quot;)) {</b>
+<b class="fc">&nbsp;                System.out.println(&quot;Error: quantity must be a whole number.&quot;); continue;</b>
+&nbsp;            }
+&nbsp;            try {
+<b class="fc">&nbsp;                int qty = Integer.parseInt(input);</b>
+<b class="fc">&nbsp;                if (qty &gt;= 1) return qty;</b>
+<b class="fc">&nbsp;                System.out.println(&quot;Error: quantity must be at least 1.&quot;);</b>
+&nbsp;            } catch (NumberFormatException e) {
+<b class="fc">&nbsp;                System.out.println(&quot;Error: quantity must be a positive integer.&quot;);</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    // ── Utilities ─────────────────────────────────────────────────────────────
+&nbsp;
+&nbsp;    static Item findItem(Cart cart, String name) {
+<b class="fc">&nbsp;        for (Item item : cart.getCartItems().keySet())</b>
+<b class="fc">&nbsp;            if (item.getName().equalsIgnoreCase(name)) return item;</b>
+<b class="fc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    static double getTaxRate(String state) {
+<b class="fc">&nbsp;        try { return Taxes.valueOf(state).getRate(); }</b>
+<b class="fc">&nbsp;        catch (IllegalArgumentException e) { return 0.0; }</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    static double getShippingCost(double subTotal, ShippingOption option) {
+<b class="fc">&nbsp;        if (option == ShippingOption.STANDARD) return subTotal &gt; 50.0 ? 0.0 : 10.0;</b>
+<b class="fc">&nbsp;        return 25.0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    static void printMenu() {
+<b class="fc">&nbsp;        System.out.println(&quot;\n========== Menu ==========&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;1. Add item to cart&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;2. Get current total&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;3. View cart&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;4. Edit item quantity&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;5. Remove item&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;6. Checkout&quot;);</b>
+<b class="fc">&nbsp;        System.out.print(&quot;Select: &quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    static void resetNextItemId() {
+<b class="fc">&nbsp;        nextItemId = 1;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-06-11 18:13</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,411 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CartAppTest</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: CartAppTest (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CartAppTest</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/42)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/98)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;import org.junit.jupiter.api.BeforeEach;
+&nbsp;import org.junit.jupiter.api.Test;
+&nbsp;
+&nbsp;import static org.junit.jupiter.api.Assertions.*;
+&nbsp;
+<b class="nc">&nbsp;public class CartAppTest {</b>
+&nbsp;
+&nbsp;    // ── Shared fixtures ───────────────────────────────────────────────────────
+&nbsp;    private Item apple;
+&nbsp;    private Item banana;
+&nbsp;    private Cart cart;
+&nbsp;    private Customer customer;
+&nbsp;
+&nbsp;    @BeforeEach
+&nbsp;    void setUp() {
+<b class="nc">&nbsp;        apple   = new Item(1, &quot;Apple&quot;,  2.00);</b>
+<b class="nc">&nbsp;        banana  = new Item(2, &quot;Banana&quot;, 1.50);</b>
+<b class="nc">&nbsp;        cart    = new Cart(1, 1);</b>
+<b class="nc">&nbsp;        customer = new Customer(1, &quot;Alice&quot;, &quot;IL&quot;, ShippingOption.STANDARD, cart);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // =========================================================================
+&nbsp;    // Item Tests
+&nbsp;    // =========================================================================
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void item_validConstruction() {
+<b class="nc">&nbsp;        assertEquals(1,       apple.getID());</b>
+<b class="nc">&nbsp;        assertEquals(&quot;Apple&quot;, apple.getName());</b>
+<b class="nc">&nbsp;        assertEquals(2.00,    apple.getPrice(), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void item_priceTooLow_throws() {
+<b class="nc">&nbsp;        assertThrows(IllegalArgumentException.class, () -&gt; new Item(99, &quot;Cheap&quot;, 0.50));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void item_priceTooHigh_throws() {
+<b class="nc">&nbsp;        assertThrows(IllegalArgumentException.class, () -&gt; new Item(99, &quot;Pricey&quot;, 100_000.00));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void item_minBoundaryPrice_valid() {
+<b class="nc">&nbsp;        assertDoesNotThrow(() -&gt; new Item(10, &quot;Min&quot;, 1.00));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void item_maxBoundaryPrice_valid() {
+<b class="nc">&nbsp;        assertDoesNotThrow(() -&gt; new Item(11, &quot;Max&quot;, 99_999.99));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void item_setters() {
+<b class="nc">&nbsp;        apple.setID(99);</b>
+<b class="nc">&nbsp;        apple.setName(&quot;Mango&quot;);</b>
+<b class="nc">&nbsp;        apple.setPrice(5.00);</b>
+<b class="nc">&nbsp;        assertEquals(99,      apple.getID());</b>
+<b class="nc">&nbsp;        assertEquals(&quot;Mango&quot;, apple.getName());</b>
+<b class="nc">&nbsp;        assertEquals(5.00,    apple.getPrice(), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void item_equals_sameID() {
+<b class="nc">&nbsp;        Item copy = new Item(1, &quot;Apple Copy&quot;, 3.00);</b>
+<b class="nc">&nbsp;        assertEquals(apple, copy);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void item_equals_differentID() {
+<b class="nc">&nbsp;        assertNotEquals(apple, banana);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void item_equals_null() {
+<b class="nc">&nbsp;        assertNotEquals(apple, null);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void item_equals_differentClass() {
+<b class="nc">&nbsp;        assertNotEquals(apple, &quot;not an item&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void item_hashCode_sameID() {
+<b class="nc">&nbsp;        Item copy = new Item(1, &quot;Apple Copy&quot;, 3.00);</b>
+<b class="nc">&nbsp;        assertEquals(apple.hashCode(), copy.hashCode());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void item_toString_format() {
+<b class="nc">&nbsp;        String s = apple.toString();</b>
+<b class="nc">&nbsp;        assertTrue(s.contains(&quot;Apple&quot;));</b>
+<b class="nc">&nbsp;        assertTrue(s.contains(&quot;2.00&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // =========================================================================
+&nbsp;    // Cart Tests
+&nbsp;    // =========================================================================
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_startsEmpty() {
+<b class="nc">&nbsp;        assertTrue(cart.getCartItems().isEmpty());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_addItem_singleItem() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 3);</b>
+<b class="nc">&nbsp;        assertEquals(3, cart.getTotalItemCount());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_addItem_accumulatesQuantity() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 2);</b>
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 3);</b>
+<b class="nc">&nbsp;        assertEquals(5, (int) cart.getCartItems().get(apple));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_removeItem() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 2);</b>
+<b class="nc">&nbsp;        cart.removeItem(apple);</b>
+<b class="nc">&nbsp;        assertFalse(cart.getCartItems().containsKey(apple));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_editQuantity() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 2);</b>
+<b class="nc">&nbsp;        cart.editQuantity(apple, 10);</b>
+<b class="nc">&nbsp;        assertEquals(10, (int) cart.getCartItems().get(apple));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_clearCart() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 2);</b>
+<b class="nc">&nbsp;        cart.addItemToCart(banana, 1);</b>
+<b class="nc">&nbsp;        cart.clearCart();</b>
+<b class="nc">&nbsp;        assertTrue(cart.getCartItems().isEmpty());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_viewCart_returnsSameMap() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 1);</b>
+<b class="nc">&nbsp;        assertEquals(cart.getCartItems(), cart.viewCart());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_getSubTotal() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 2);   // 4.00</b>
+<b class="nc">&nbsp;        cart.addItemToCart(banana, 4);  // 6.00</b>
+<b class="nc">&nbsp;        assertEquals(10.00, cart.getSubTotal(), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_getTotalItemCount_multipleItems() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 3);</b>
+<b class="nc">&nbsp;        cart.addItemToCart(banana, 2);</b>
+<b class="nc">&nbsp;        assertEquals(5, cart.getTotalItemCount());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // ── getTotal: tax + shipping combinations ─────────────────────────────────
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_getTotal_IL_standard_under50_chargesShipping() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 2); // subtotal = 4.00</b>
+&nbsp;        // tax: 4.00 * 0.06 = 0.24, shipping = 10.00  → 14.24
+<b class="nc">&nbsp;        assertEquals(14.24, cart.getTotal(&quot;IL&quot;, ShippingOption.STANDARD), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_getTotal_IL_standard_over50_freeShipping() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 30); // subtotal = 60.00</b>
+&nbsp;        // tax: 60 * 0.06 = 3.60, shipping = 0  → 63.60
+<b class="nc">&nbsp;        assertEquals(63.60, cart.getTotal(&quot;IL&quot;, ShippingOption.STANDARD), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_getTotal_nextDay_alwaysCharges25() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 30); // subtotal = 60.00</b>
+&nbsp;        // tax: 3.60, shipping = 25  → 88.60
+<b class="nc">&nbsp;        assertEquals(88.60, cart.getTotal(&quot;IL&quot;, ShippingOption.NEXT_DAY), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_getTotal_nextDay_under50_charges25() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 2); // subtotal = 4.00</b>
+&nbsp;        // tax: 0.24, shipping = 25  → 29.24
+<b class="nc">&nbsp;        assertEquals(29.24, cart.getTotal(&quot;IL&quot;, ShippingOption.NEXT_DAY), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_getTotal_CA_taxApplied() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 2); // subtotal = 4.00</b>
+&nbsp;        // CA rate = 0.06, tax = 0.24, shipping = 10  → 14.24
+<b class="nc">&nbsp;        assertEquals(14.24, cart.getTotal(&quot;CA&quot;, ShippingOption.STANDARD), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_getTotal_NY_taxApplied() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 2); // subtotal = 4.00</b>
+&nbsp;        // NY rate = 0.06 → 14.24
+<b class="nc">&nbsp;        assertEquals(14.24, cart.getTotal(&quot;NY&quot;, ShippingOption.STANDARD), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_getTotal_unknownState_noTax() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 2); // subtotal = 4.00</b>
+&nbsp;        // no tax, shipping = 10  → 14.00
+<b class="nc">&nbsp;        assertEquals(14.00, cart.getTotal(&quot;ZZ&quot;, ShippingOption.STANDARD), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_getTotal_unknownState_nextDay() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 2); // subtotal = 4.00, tax = 0, shipping = 25</b>
+<b class="nc">&nbsp;        assertEquals(29.00, cart.getTotal(&quot;ZZ&quot;, ShippingOption.NEXT_DAY), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // ── Cart getters / setters ────────────────────────────────────────────────
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_gettersSetters() {
+<b class="nc">&nbsp;        cart.setID(42);</b>
+<b class="nc">&nbsp;        cart.setCustomerID(99);</b>
+<b class="nc">&nbsp;        assertEquals(42, cart.getID());</b>
+<b class="nc">&nbsp;        assertEquals(99, cart.getCustomerID());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void cart_setCartItems() {
+<b class="nc">&nbsp;        java.util.Map&lt;Item, Integer&gt; newItems = new java.util.HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        newItems.put(apple, 5);</b>
+<b class="nc">&nbsp;        cart.setCartItems(newItems);</b>
+<b class="nc">&nbsp;        assertEquals(5, (int) cart.getCartItems().get(apple));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // =========================================================================
+&nbsp;    // Customer Tests
+&nbsp;    // =========================================================================
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void customer_getCartTotal_delegatesToCart() {
+<b class="nc">&nbsp;        cart.addItemToCart(apple, 2); // subtotal 4.00 → total 14.24 (IL, STANDARD)</b>
+<b class="nc">&nbsp;        assertEquals(14.24, customer.getCartTotal(), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void customer_gettersSetters() {
+<b class="nc">&nbsp;        customer.setId(7);</b>
+<b class="nc">&nbsp;        customer.setName(&quot;Bob&quot;);</b>
+<b class="nc">&nbsp;        customer.setStateOfResidence(&quot;CA&quot;);</b>
+<b class="nc">&nbsp;        customer.setShippingOption(ShippingOption.NEXT_DAY);</b>
+&nbsp;
+<b class="nc">&nbsp;        Cart newCart = new Cart(2, 7);</b>
+<b class="nc">&nbsp;        customer.setCart(newCart);</b>
+&nbsp;
+<b class="nc">&nbsp;        assertEquals(7,                        customer.getId());</b>
+<b class="nc">&nbsp;        assertEquals(&quot;Bob&quot;,                    customer.getName());</b>
+<b class="nc">&nbsp;        assertEquals(&quot;CA&quot;,                     customer.getStateOfResidence());</b>
+<b class="nc">&nbsp;        assertEquals(ShippingOption.NEXT_DAY,  customer.getShippingOption());</b>
+<b class="nc">&nbsp;        assertEquals(newCart,                  customer.getCart());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // =========================================================================
+&nbsp;    // Taxes Enum Tests
+&nbsp;    // =========================================================================
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void taxes_IL_rate() {
+<b class="nc">&nbsp;        assertEquals(0.06, Taxes.IL.getRate(), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void taxes_CA_rate() {
+<b class="nc">&nbsp;        assertEquals(0.06, Taxes.CA.getRate(), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void taxes_NY_rate() {
+<b class="nc">&nbsp;        assertEquals(0.06, Taxes.NY.getRate(), 0.001);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void taxes_valueOf_valid() {
+<b class="nc">&nbsp;        assertEquals(Taxes.IL, Taxes.valueOf(&quot;IL&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void taxes_valueOf_invalid_throws() {
+<b class="nc">&nbsp;        assertThrows(IllegalArgumentException.class, () -&gt; Taxes.valueOf(&quot;ZZ&quot;));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // =========================================================================
+&nbsp;    // ShippingOption Enum Tests
+&nbsp;    // =========================================================================
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void shippingOption_values_exist() {
+<b class="nc">&nbsp;        assertNotNull(ShippingOption.STANDARD);</b>
+<b class="nc">&nbsp;        assertNotNull(ShippingOption.NEXT_DAY);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Test
+&nbsp;    void shippingOption_valueOf() {
+<b class="nc">&nbsp;        assertEquals(ShippingOption.STANDARD, ShippingOption.valueOf(&quot;STANDARD&quot;));</b>
+<b class="nc">&nbsp;        assertEquals(ShippingOption.NEXT_DAY, ShippingOption.valueOf(&quot;NEXT_DAY&quot;));</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-06-11 18:13</div>
+</div>
+</body>
+</html>
