@@ -3,10 +3,15 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static final Scanner scanner = new Scanner(System.in);
     private static int nextItemId = 1;
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        runApp(scanner);
+        scanner.close();
+    }
+
+    public static void runApp(Scanner scanner) {
 
         System.out.println("========================================");
         System.out.println("         Welcome to the Shop            ");
@@ -15,8 +20,8 @@ public class Main {
         System.out.print("\nEnter your name: ");
         String name = scanner.nextLine().trim();
 
-        String state = promptState();
-        ShippingOption shipping = promptShippingOption();
+        String state = promptState(scanner);
+        ShippingOption shipping = promptShippingOption(scanner);
 
         Cart     cart     = new Cart(1, 1);
         Customer customer = new Customer(1, name, state, shipping, cart);
@@ -29,28 +34,26 @@ public class Main {
             String choice = scanner.nextLine().trim();
 
             switch (choice) {
-                case "1": handleAddItem(customer);             break;
-                case "2": handleGetTotal(customer);            break;
-                case "3": handleViewCart(customer);            break;
-                case "4": handleEditQuantity(customer);        break;
-                case "5": handleRemoveItem(customer);          break;
-                case "6": running = !handleCheckout(customer); break;
+                case "1": handleAddItem(customer, scanner);             break;
+                case "2": handleGetTotal(customer);                     break;
+                case "3": handleViewCart(customer);                     break;
+                case "4": handleEditQuantity(customer, scanner);        break;
+                case "5": handleRemoveItem(customer, scanner);          break;
+                case "6": running = !handleCheckout(customer);          break;
                 default:  System.out.println("Enter 1-6.");
             }
         }
-
-        scanner.close();
     }
 
     // ── Action handlers ───────────────────────────────────────────────────────
 
-    private static void handleAddItem(Customer customer) {
+    static void handleAddItem(Customer customer, Scanner scanner) {
         System.out.print("\nItem name: ");
         String itemName = scanner.nextLine().trim();
         if (itemName.isEmpty()) { System.out.println("Name cannot be blank."); return; }
 
-        double price = promptPrice(); // validated in Item constructor
-        int    qty   = promptQuantity();
+        double price = promptPrice(scanner);
+        int    qty   = promptQuantity(scanner);
 
         try {
             Item item = new Item(nextItemId++, itemName, price);
@@ -62,7 +65,7 @@ public class Main {
         }
     }
 
-    private static void handleGetTotal(Customer customer) {
+    static void handleGetTotal(Customer customer) {
         Cart cart = customer.getCart();
         if (cart.getCartItems().isEmpty()) { System.out.println("\nCart is empty."); return; }
 
@@ -79,7 +82,7 @@ public class Main {
         System.out.printf("Total    : $%8.2f%n", total);
     }
 
-    private static void handleViewCart(Customer customer) {
+    static void handleViewCart(Customer customer) {
         Map<Item, Integer> items = customer.getCart().getCartItems();
         if (items.isEmpty()) { System.out.println("\nCart is empty."); return; }
 
@@ -95,7 +98,7 @@ public class Main {
         System.out.println("------------------------------");
     }
 
-    private static void handleEditQuantity(Customer customer) {
+    static void handleEditQuantity(Customer customer, Scanner scanner) {
         if (customer.getCart().getCartItems().isEmpty()) {
             System.out.println("\nCart is empty."); return;
         }
@@ -105,12 +108,12 @@ public class Main {
         Item found = findItem(customer.getCart(), scanner.nextLine().trim());
         if (found == null) { System.out.println("Item not found."); return; }
 
-        int newQty = promptQuantity();
+        int newQty = promptQuantity(scanner);
         customer.getCart().editQuantity(found, newQty);
         System.out.printf("Quantity for \"%s\" updated to %d.%n", found.getName(), newQty);
     }
 
-    private static void handleRemoveItem(Customer customer) {
+    static void handleRemoveItem(Customer customer, Scanner scanner) {
         if (customer.getCart().getCartItems().isEmpty()) {
             System.out.println("\nCart is empty."); return;
         }
@@ -125,7 +128,7 @@ public class Main {
                 found.getName(), customer.getCart().getTotalItemCount());
     }
 
-    private static boolean handleCheckout(Customer customer) {
+    static boolean handleCheckout(Customer customer) {
         if (customer.getCart().getCartItems().isEmpty()) {
             System.out.println("\nCannot checkout — cart is empty."); return false;
         }
@@ -137,7 +140,7 @@ public class Main {
 
     // ── Input helpers ─────────────────────────────────────────────────────────
 
-    private static String promptState() {
+    static String promptState(Scanner scanner) {
         while (true) {
             System.out.print("State abbreviation (e.g. IL, TX): ");
             String s = scanner.nextLine().trim().toUpperCase();
@@ -146,7 +149,7 @@ public class Main {
         }
     }
 
-    private static ShippingOption promptShippingOption() {
+    static ShippingOption promptShippingOption(Scanner scanner) {
         System.out.println("Shipping: 1. Standard ($10, free over $50)  2. Next Day ($25)");
         while (true) {
             System.out.print("Select (1 or 2): ");
@@ -158,13 +161,13 @@ public class Main {
         }
     }
 
-    private static double promptPrice() {
+    static double promptPrice(Scanner scanner) {
         while (true) {
             System.out.print("Unit price ($): ");
             try {
                 double p = Double.parseDouble(scanner.nextLine().trim());
-                if (p < 1.00)         { System.out.println("Price must be at least $1.00.");          continue; }
-                if (p > 99_999.99)    { System.out.println("Price cannot exceed $99,999.99.");        continue; }
+                if (p < 1.00)      { System.out.println("Price must be at least $1.00.");   continue; }
+                if (p > 99_999.99) { System.out.println("Price cannot exceed $99,999.99."); continue; }
                 return p;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid price.");
@@ -172,7 +175,7 @@ public class Main {
         }
     }
 
-    private static int promptQuantity() {
+    static int promptQuantity(Scanner scanner) {
         while (true) {
             System.out.print("Quantity: ");
             String input = scanner.nextLine().trim();
@@ -191,23 +194,23 @@ public class Main {
 
     // ── Utilities ─────────────────────────────────────────────────────────────
 
-    private static Item findItem(Cart cart, String name) {
+    static Item findItem(Cart cart, String name) {
         for (Item item : cart.getCartItems().keySet())
             if (item.getName().equalsIgnoreCase(name)) return item;
         return null;
     }
 
-    private static double getTaxRate(String state) {
+    static double getTaxRate(String state) {
         try { return Taxes.valueOf(state).getRate(); }
         catch (IllegalArgumentException e) { return 0.0; }
     }
 
-    private static double getShippingCost(double subTotal, ShippingOption option) {
+    static double getShippingCost(double subTotal, ShippingOption option) {
         if (option == ShippingOption.STANDARD) return subTotal > 50.0 ? 0.0 : 10.0;
         return 25.0;
     }
 
-    private static void printMenu() {
+    static void printMenu() {
         System.out.println("\n========== Menu ==========");
         System.out.println("1. Add item to cart");
         System.out.println("2. Get current total");
@@ -216,5 +219,9 @@ public class Main {
         System.out.println("5. Remove item");
         System.out.println("6. Checkout");
         System.out.print("Select: ");
+    }
+
+    static void resetNextItemId() {
+        nextItemId = 1;
     }
 }
